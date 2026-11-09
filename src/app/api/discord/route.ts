@@ -4,6 +4,8 @@ import {
     InteractionResponseType
 } from 'discord-interactions';
 
+import type { CommandInteraction } from '@/app/definitions.mjs';
+
 import { NextRequest, NextResponse } from 'next/server';
 
 
@@ -26,13 +28,23 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return new NextResponse("Invalid signature", { status: 401 });
     }
 
-    const interaction = JSON.parse(rawBody) as { type: number };
+    const interaction = JSON.parse(rawBody) as CommandInteraction;
 
     if (interaction.type === InteractionType.PING) {
         return NextResponse.json(
             { type: InteractionResponseType.PONG },
             { status: 200 }
         )
+    } else if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+        if (interaction.data?.name === "schedule") {
+            const period = interaction.data?.options?.find( value => value.name === "period")?.value!;
+            return NextResponse.json({ 
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                    content: `Showing schedule for: ${period}`
+                }
+            });
+        }
     }
 
 
