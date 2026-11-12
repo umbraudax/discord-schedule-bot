@@ -4,9 +4,11 @@ import {
     InteractionResponseType
 } from 'discord-interactions';
 
-import type { CommandInteraction } from '@/app/definitions.mjs';
+import type { CommandInteraction } from '@/app/definitions.js';
+import { handleSchedule } from '@/server/commands/handle-schedule';
 
 import { NextRequest, NextResponse } from 'next/server';
+import { dispatchCommand } from '@/server/commands/dispatch-command';
 
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -36,15 +38,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             { status: 200 }
         )
     } else if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-        if (interaction.data?.name === "schedule") {
-            const period = interaction.data?.options?.find( value => value.name === "period")?.value!;
-            return NextResponse.json({ 
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: {
-                    content: `Showing schedule for: ${period}`
-                }
-            });
-        }
+        return NextResponse.json({ 
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+                content: dispatchCommand(interaction.data!)
+            }
+        });
     }
 
 
