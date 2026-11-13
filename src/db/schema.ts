@@ -5,8 +5,6 @@ import {
     timestamp
 } from 'drizzle-orm/pg-core';
 
-
-
 // CREATE TABLE events (
 //      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 //      server_id TEXT NOT NULL,
@@ -25,9 +23,9 @@ export const events = pgTable("events", {
     creatorId: text("creator_id")
         .notNull(),
     eventTitle: text("event_title"),
-    eventStartTime: timestamp("event_start_time")
+    eventStartTime: timestamp("event_start_time", { withTimezone: true })
         .notNull(),
-    createdOn: timestamp("created_on")
+    creationTime: timestamp("creation_time", { withTimezone: true })
         .defaultNow()
         .notNull()    
 });
