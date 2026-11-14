@@ -14,5 +14,9 @@ describe('handleSchedule', () => {
     it("empty string gives invalid message", () => {
         expect( handleSchedule({ period: "" }) ).toBe("Please enter a valid period!");
     });
+
+    it("year gives invalid message", () => {
+        expect( handleSchedule({ period: "year" }) ).toBe("Please enter a valid period!");
+    });
 });
 
