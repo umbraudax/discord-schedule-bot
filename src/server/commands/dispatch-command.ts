@@ -7,9 +7,9 @@ const commandLookup = {
 }
 
 
-export function dispatchCommand(
+export async function dispatchCommand(
     command: CommandData
-): string {
+): Promise<string> {
     if (!Object.hasOwn(commandLookup, command.name)) {
         return "Unknown command."
     }
@@ -18,6 +18,6 @@ export function dispatchCommand(
     const commandHandle = commandLookup[command.name as keyof typeof commandLookup];
 
     const params = buildParams(command.name, command.options);
-    return commandHandle(params!);
+    return await commandHandle(params!);
 
 }

@@ -41,7 +41,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return NextResponse.json({ 
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-                content: dispatchCommand(interaction.data!)
+                content: await dispatchCommand(interaction.data!)
             }
         });
     }

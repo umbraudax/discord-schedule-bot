@@ -1,13 +1,16 @@
 import type { ScheduleCommandParams } from "@/app/definitions"
 import { isSchedulePeriod } from "../scheduling/validate-period"
+import { getScheduledEvents } from "../scheduling/get-scheduled-events"
 
-export function handleSchedule(
+export async function handleSchedule(
     { period } : ScheduleCommandParams 
-): string {
+): Promise<string> {
     if (!isSchedulePeriod(period)) {
         return "Please enter a valid period!"
     }
 
+    // eventaully pass through one more layer for formatting
+    const scheduledEvents = await getScheduledEvents(process.env.DISCORD_GUILD_ID as string, period, new Date(Date.now()));
 
-    return `Showing schedule for: ${period}`
+    return `Showing schedule for: ${scheduledEvents.join('\n')}`
 }
