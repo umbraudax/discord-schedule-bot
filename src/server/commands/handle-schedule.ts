@@ -12,5 +12,5 @@ export async function handleSchedule(
     // eventaully pass through one more layer for formatting
     const scheduledEvents = await getScheduledEvents(process.env.DISCORD_GUILD_ID as string, period, new Date(Date.now()));
 
-    return `Showing schedule for: ${scheduledEvents.join('\n')}`
+    return `Showing schedule for: ${period}:\n${scheduledEvents.map(o => `${o.eventTitle} @ ${o.eventStartTime}`).join('\n')}`
 }
